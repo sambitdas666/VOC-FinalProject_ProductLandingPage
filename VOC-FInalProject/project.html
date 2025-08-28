@@ -1952,9 +1952,380 @@
             </div>
         </div>
     </footer>
+    <script>
+
+        // Fade-in Animation Observer
+        const fadeElements = document.querySelectorAll(".fade-in");
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target); // run once
+                    }
+                });
+            },
+            {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px",
+            }
+        );
+
+        fadeElements.forEach((element) => observer.observe(element));
+
+
+
+        // Configurator Functionality
+        document.addEventListener("DOMContentLoaded", function () {
+            const colorOptions = document.querySelectorAll(".color-option");
+            const phoneFrame = document.getElementById("phoneFrame");
+            const currentColorName = document.getElementById("currentColorName");
+            const selectedColor = document.getElementById("selectedColor");
+
+            function updateWallpaper(color) {
+                const dynamicWallpaper = document.getElementById("dynamicWallpaper");
+                switch (color) {
+                    case "#4a6cfa":
+                        dynamicWallpaper.style.background =
+                            "linear-gradient(135deg, #0a2a5f, #4a6cfa)";
+                        break;
+                    case "#222":
+                        dynamicWallpaper.style.background =
+                            "linear-gradient(135deg, #000, #444)";
+                        break;
+                    case "#c0c6e4":
+                        dynamicWallpaper.style.background =
+                            "linear-gradient(135deg, #a1b0cc, #e6e9f0)";
+                        break;
+                    case "#ff5e7d":
+                        dynamicWallpaper.style.background =
+                            "linear-gradient(135deg, #ff8a9f, #ff5e7d)";
+                        break;
+                    case "#ddb00c":
+                        dynamicWallpaper.style.background =
+                            "linear-gradient(135deg, #ffcf40, #ddb00c)";
+                        break;
+                    case "#0cd1ef":
+                        dynamicWallpaper.style.background =
+                            "linear-gradient(135deg, #0cd1ef, #0277bd)";
+                        break;
+                    default:
+                        dynamicWallpaper.style.background =
+                            "linear-gradient(135deg, #0a2a5f, #4a6cfa)";
+                }
+            }
+
+            colorOptions.forEach((option) => {
+                option.addEventListener("click", function () {
+                    colorOptions.forEach((opt) => opt.classList.remove("active"));
+                    this.classList.add("active");
+
+                    const color = this.getAttribute("data-color");
+                    const colorName = this.getAttribute("data-name");
+
+                    phoneFrame.style.backgroundColor = color;
+                    currentColorName.textContent = colorName;
+                    selectedColor.textContent = colorName;
+
+                    updateWallpaper(color);
+                });
+            });
+
+            updateWallpaper("#4a6cfa"); 
+
+
+            //Storage Selection
+            const storageOptions = document.querySelectorAll(".storage-option");
+            const selectedStorage = document.getElementById("selectedStorage");
+            const selectedPrice = document.getElementById("selectedPrice");
+
+            storageOptions.forEach((option) => {
+                option.addEventListener("click", function () {
+                    storageOptions.forEach((opt) => opt.classList.remove("active"));
+                    this.classList.add("active");
+
+                    const storage = this.getAttribute("data-storage");
+                    const price = this.getAttribute("data-price");
+
+                    selectedStorage.textContent = storage + "GB";
+                    selectedPrice.textContent = price;
+                });
+            });
+
+
+            // Mobile Menu
+            const menuToggle = document.getElementById("menuToggle");
+            const navLinks = document.getElementById("navLinks");
+
+            if (menuToggle) {
+                menuToggle.addEventListener("click", function () {
+                    navLinks.classList.toggle("show");
+                });
+            }
+
+            const header = document.getElementById("header");
+            window.addEventListener("scroll", function () {
+                if (window.scrollY > 50) {
+                    header.classList.add("scrolled");
+                } else {
+                    header.classList.remove("scrolled");
+                }
+            });
+        });
+
+       
+        // Hero Section Text Rotator
+        const messages = [
+            "The Future of Smartphones is Here",
+            "Experience Innovation Like Never Before",
+            "xeNox-Phone – Redefining Mobile",
+        ];
+
+        let index = 0;
+        const h1 = document.querySelector(".hero-content h1");
+
+        if (h1) {
+            setInterval(() => {
+                h1.style.opacity = 0;
+                setTimeout(() => {
+                    h1.textContent = messages[index];
+                    h1.style.opacity = 1;
+                    index = (index + 1) % messages.length;
+                }, 500);
+            }, 4000);
+        }
+
+
+        // Testimonials Auto Rotate
+        document.addEventListener("DOMContentLoaded", () => {
+            const cards = Array.from(
+                document.querySelectorAll(".testimonial-wrapper .testimonial-card")
+            );
+            if (!cards.length) return;
+
+            let activeIndex = cards.findIndex((c) => c.classList.contains("active"));
+            if (activeIndex === -1) {
+                activeIndex = 0;
+                cards[0].classList.add("active");
+            } else {
+                cards.forEach((c, i) => {
+                    if (i !== activeIndex) c.classList.remove("active");
+                });
+            }
+
+            function next() {
+                cards[activeIndex].classList.remove("active");
+                activeIndex = (activeIndex + 1) % cards.length;
+                cards[activeIndex].classList.add("active");
+            }
+
+            setInterval(next, 4000);
+        });
+
+
+        // Pricing Toggle (Monthly / Yearly)
+        const priceToggle = document.getElementById("price-toggle");
+        if (priceToggle) {
+            priceToggle.addEventListener("change", function () {
+                const amounts = document.querySelectorAll(".amount");
+                amounts.forEach((amount) => {
+                    amount.textContent = this.checked
+                        ? amount.getAttribute("data-yearly")
+                        : amount.getAttribute("data-monthly");
+                });
+            });
+        }
+
+
+        // Footer Utilities
+        const yearElement = document.getElementById("year");
+        if (yearElement) {
+            yearElement.textContent = new Date().getFullYear();
+        }
+
+        document.querySelectorAll("footer a[href^='#']").forEach((anchor) => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute("href"));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                    });
+                }
+            });
+        });
+
+
+        // Cart System (Merged & Fixed)
+        const addToCartBtn = document.getElementById("addToCart");
+        const cartIcon = document.querySelector(".cart");
+        const cartBadge = document.querySelector(".cart-badge");
+
+        let cart = [];
+
+        // Create cart panel if it doesn't exist
+        if (!document.getElementById("cartPanel")) {
+            const cartPanelHTML = `
+    <div id="cartPanel" class="cart-panel">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button id="closeCart" class="close-cart">&times;</button>
+      </div>
+      <div id="cartItems" class="cart-items">
+        <div class="empty-cart-message">
+          <i class="fas fa-shopping-cart"></i>
+          <p>Your cart is empty</p>
+        </div>
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">Total: $<span id="cartTotal">0.00</span></div>
+        <button id="checkoutBtn" class="checkout-btn">Checkout</button>
+      </div>
+    </div>
+  `;
+            document.body.insertAdjacentHTML("beforeend", cartPanelHTML);
+        }
+
+        const cartPanel = document.getElementById("cartPanel");
+        const closeCartBtn = document.getElementById("closeCart");
+        const cartItemsContainer = document.getElementById("cartItems");
+        const cartTotalElement = document.getElementById("cartTotal");
+        const checkoutBtn = document.getElementById("checkoutBtn");
+
+        if (cartIcon) {
+            cartIcon.addEventListener("click", () => {
+                cartPanel.classList.add("active");
+                renderCart();
+            });
+        }
+
+        if (closeCartBtn) {
+            closeCartBtn.addEventListener("click", () => {
+                cartPanel.classList.remove("active");
+            });
+        }
+
+        document.addEventListener("click", (event) => {
+            if (
+                cartPanel.classList.contains("active") &&
+                !cartPanel.contains(event.target) &&
+                !cartIcon.contains(event.target)
+            ) {
+                cartPanel.classList.remove("active");
+            }
+        });
+
+        // Add to cart
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener("click", function () {
+                this.classList.add("adding");
+
+                const color =
+                    document.querySelector(".color-option.active")?.getAttribute("data-name") ||
+                    "Default";
+                const storage =
+                    document.querySelector(".storage-option.active")?.getAttribute("data-storage") ||
+                    "Unknown";
+                const price =
+                    document.querySelector(".storage-option.active")?.getAttribute("data-price") ||
+                    "0";
+
+                setTimeout(() => {
+                    this.classList.remove("adding");
+
+                    cart.push({ color, storage, price: parseFloat(price) });
+                    cartBadge.textContent = cart.length;
+                    renderCart();
+                }, 500);
+            });
+        }
+
+        // Render Cart Items
+        function renderCart() {
+            cartItemsContainer.innerHTML = "";
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+      <div class="empty-cart-message">
+        <i class="fas fa-shopping-cart"></i>
+        <p>Your cart is empty</p>
+      </div>
+    `;
+                cartTotalElement.textContent = "0.00";
+                checkoutBtn.disabled = true;
+                checkoutBtn.classList.add("disabled");
+                return;
+            }
+
+            checkoutBtn.disabled = false;
+            checkoutBtn.classList.remove("disabled");
+
+            cart.forEach((item, index) => {
+                total += item.price;
+
+                const div = document.createElement("div");
+                div.classList.add("cart-item");
+                div.innerHTML = `
+      <h4 style="color:black;">xeNox Phone</h4>
+      <p style="color:black;">${item.color} - ${item.storage}GB</p>
+      <span class="cart-item-price" style="color:black;">$${item.price.toFixed(
+                    2
+                )}</span>
+      <button class="remove-btn" data-index="${index}">&times;</button>
+    `;
+                cartItemsContainer.appendChild(div);
+            });
+
+            cartTotalElement.textContent = total.toFixed(2);
+
+            document.querySelectorAll(".remove-btn").forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    const idx = this.getAttribute("data-index");
+                    cart.splice(idx, 1);
+                    cartBadge.textContent = cart.length;
+                    renderCart();
+                });
+            });
+        }
+
+        // Checkout
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener("click", () => {
+                if (cart.length > 0) {
+                    alert(
+                        `Proceeding to checkout with ${cart.length} items. Total: $${cart
+                            .reduce((sum, item) => sum + item.price, 0)
+                            .toFixed(2)}`
+                    );
+                }
+            });
+        }
+
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute("href");
+                if (targetId === "#") return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }
+            });
+        });
+    </script>
 
 
     </body>
 
 </html>
+
 
